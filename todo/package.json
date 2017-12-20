@@ -1,0 +1,23 @@
+{
+  "name": "basics",
+  "version": "1.0.0",
+  "description": "Learning graphql",
+  "main": "server.js",
+  "scripts": {
+    "start": "nodemon server.js",
+    "json:server": "json-server --watch data.json"
+  },
+  "keywords": [
+    "graphql"
+  ],
+  "author": "Muhammad Tahir",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.17.1",
+    "express": "^4.16.2",
+    "express-graphql": "^0.6.11",
+    "graphql": "^0.12.3",
+    "json-server": "^0.12.1",
+    "nodemon": "^1.13.3"
+  }
+}
