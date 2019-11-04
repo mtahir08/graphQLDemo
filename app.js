@@ -3,8 +3,8 @@ const bodyParser = require('body-parser');
 const graphqlHttp = require('express-graphql');
 const mongoose = require('mongoose');
 
-const graphQlSchema = require('./graphql/Schema/index')
-const graphQlResolvers = require('./graphql/resolvers/index')
+const graphQlSchema = require('./graphql/Schema')
+const graphQlResolvers = require('./graphql/resolvers')
 
 const app = express();
 app.use(bodyParser.json())
@@ -14,8 +14,8 @@ app.use('/graphql', graphqlHttp({
     rootValue: graphQlResolvers,
     graphiql: true
 }));
-
-mongoose.connect(`mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cluster0-r4te6.mongodb.net/${process.env.MONGO_DB}?retryWrites=true`)
+const url = `mongodb://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@ds137368.mlab.com:37368/${process.env.MONGO_DB}`
+mongoose.connect(url, { useNewUrlParser: true })
     .then(() => {
         app.listen(3000, () => {
             console.log("server is running!!!!");
