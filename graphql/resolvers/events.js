@@ -16,13 +16,16 @@ module.exports = {
             throw error
         }
     },
-    createEvent: async (args) => {
+    createEvent: async (args, req) => {
+        if (!req.isAuth) {
+            throw new Error("UnAuthorized!");
+        }
         const event = new Event({
             title: args.eventInput.title,
             description: args.eventInput.description,
             price: +args.eventInput.price,
             date: args.eventInput.date,
-            creator: '5daabb4e965e5c7d088aba93'
+            creator: req.userId
         });
         try {
             const result = await event.save();
