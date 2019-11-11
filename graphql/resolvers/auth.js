@@ -2,6 +2,7 @@ const bcrypt = require('bcrypt');
 
 const User = require('./../../models/user');
 const { transformUser } = require('./general');
+const { generateToken } = require('./../../helpers/JWT');
 
 module.exports = {
     createUser: async (args) => {
@@ -47,7 +48,8 @@ module.exports = {
         const isEqual = await bcrypt.compare(password, user.password)
         if (!isEqual) {
             throw new Error("Password does not matched");
-
         }
+        const token = generateToken(user);
+        return { userId: user.id, token, tokenExpiration: 1 }
     }
 }
