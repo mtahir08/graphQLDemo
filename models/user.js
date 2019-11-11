@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const eventSchema = new Schema({
+const userSchema = new Schema({
     email: {
         type: String,
         required: true
@@ -17,4 +17,4 @@ const eventSchema = new Schema({
     }],
 })
 
-module.exports = mongoose.model("User", eventSchema);
+module.exports = mongoose.model("User", userSchema);
