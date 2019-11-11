@@ -26,7 +26,7 @@ module.exports = {
     },
     user: async userId => {
         try {
-            return await user(userId)
+            return await User.findById(userId)
         } catch (error) {
             throw error
         }
@@ -37,6 +37,17 @@ module.exports = {
             return users.map((user) => transformUser(user))
         } catch (error) {
             throw error
+        }
+    },
+    login: async ({ email, password }) => {
+        const user = await User.findOne({ email })
+        if (!user) {
+            throw new Error("User already Exists!");
+        }
+        const isEqual = await bcrypt.compare(password, user.password)
+        if (!isEqual) {
+            throw new Error("Password does not matched");
+
         }
     }
 }
