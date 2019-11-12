@@ -1,5 +1,5 @@
-const Event = require('./../../models/event');
-const Booking = require('./../../models/booking');
+const Event = require('../../models/event');
+const Booking = require('../../models/booking');
 const { transformBooking, transformEvent } = require('./general');
 
 module.exports = {

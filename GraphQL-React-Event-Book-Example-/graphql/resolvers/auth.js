@@ -1,8 +1,8 @@
 const bcrypt = require('bcrypt');
 
-const User = require('./../../models/user');
+const User = require('../../models/user');
 const { transformUser } = require('./general');
-const { generateToken } = require('./../../helpers/JWT');
+const { generateToken } = require('../../helpers/JWT');
 
 module.exports = {
     createUser: async (args) => {

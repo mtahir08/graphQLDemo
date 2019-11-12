@@ -1,4 +1,4 @@
-const { verify } = require('./../helpers/JWT')
+const { verify } = require('../helpers/JWT')
 module.exports = (req, res, next) => {
     const authHeader = req.get('Authorization');
     if (!authHeader) {
