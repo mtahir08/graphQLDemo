@@ -1,0 +1,3 @@
+[submodule "GraphQL-React-Event-Book-Example"]
+	path = GraphQL-React-Event-Book-Example
+	url = https://github.com/mtahir08/graphQLDemo.git
