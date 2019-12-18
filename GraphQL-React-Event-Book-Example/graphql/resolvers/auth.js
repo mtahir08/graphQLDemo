@@ -43,7 +43,7 @@ module.exports = {
     login: async ({ email, password }) => {
         const user = await User.findOne({ email })
         if (!user) {
-            throw new Error("User already Exists!");
+            throw new Error("User does not Exists!");
         }
         const isEqual = await bcrypt.compare(password, user.password)
         if (!isEqual) {
