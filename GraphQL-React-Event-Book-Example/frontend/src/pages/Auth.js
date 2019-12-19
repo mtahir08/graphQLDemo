@@ -7,6 +7,13 @@ class Auth extends Component {
         super(props);
         this.emailRef = React.createRef()
         this.passwordRef = React.createRef()
+        this.state = {
+            isLogin: false
+        }
+    }
+
+    onClick = () => {
+        this.setState({ isLogin: !this.state.isLogin })
     }
 
     onSubmit = (e) => {
@@ -18,13 +25,26 @@ class Auth extends Component {
             return;
         }
 
-        const reqBody = {
+        let reqBody = {
             query: `mutation{
                 createUser(userInput:{email:"${email}", password:"${password}"}){
                     _id
                     email
                 }
             }`
+        }
+
+        if (!this.state.isLogin) {
+            reqBody = {
+                query: `
+                query {
+                    login(email: "${email}", password: "${password}"){
+                        userId
+                        token
+                        tokenExpiration
+                    }
+                }`
+            }
         }
 
         const options = {
@@ -68,9 +88,9 @@ class Auth extends Component {
                     <Button variant="primary" type="submit">
                         Submit
                 </Button>
-                    <Button variant="light" type="button">
-                        Goto Signup
-                </Button>
+                    <Button variant="light" type="button" onClick={this.onClick}>
+                        {!this.state.isLogin ? 'Goto Signup' : 'Goto Login'}
+                    </Button>
                 </Form>
             </Container>
         );
