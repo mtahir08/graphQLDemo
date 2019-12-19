@@ -1,10 +1,18 @@
 import React from 'react';
+import { BrowserRouter, Route, Redirect, Switch } from 'react-router-dom'
+
+import { Auth, Bookings, Events } from "./pages";
 
 function App() {
   return (
-    <div>
-      app render
-    </div>
+    <BrowserRouter>
+      <Switch>
+        <Redirect from='/' to='/auth' exact />
+        <Route path='/auth' component={Auth} />
+        <Route path='/events' component={Events} />
+        <Route path='/bookings' component={Bookings} />
+      </Switch>
+    </BrowserRouter>
   );
 }
 
