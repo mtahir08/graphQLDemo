@@ -4,6 +4,7 @@ import Form from 'react-bootstrap/Form'
 import Jumbotron from 'react-bootstrap/Jumbotron'
 
 import { ModalEvent } from './../components/Modal/Modal'
+import { AuthContext } from './../context/auth-context'
 class Events extends Component {
     state = {
         showModal: false
@@ -16,6 +17,7 @@ class Events extends Component {
         this.dateRef = React.createRef()
         this.descriptionRef = React.createRef()
     }
+    static contextType = AuthContext
 
     toggleCreateModal = (flag) => {
         this.setState({ showModal: flag })
@@ -36,8 +38,44 @@ class Events extends Component {
         ) {
             return;
         }
-        const event = { title, price, date, description }
-        console.log(event);
+
+        const reqBody = {
+            query: `mutation{
+                createEvent(eventInput:{title:"${title}", price:${price}, date:"${date}", description:"${description}"}){
+                    _id
+                    title
+                    price
+                    date
+                    description
+                    creator {
+                        _id
+                        email
+                    }
+                }
+            }`
+        }
+
+        const options = {
+            method: "POST",
+            body: JSON.stringify(reqBody),
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${this.context.token}`
+            }
+        }
+
+        fetch('http://localhost:4000/graphql', options)
+            .then((response) => {
+                return response.json()
+            })
+            .then((json) => {
+                console.log(json.data.createEvent);
+                if (json.data.createEvent && json.data.createEvent._id) {
+                }
+            })
+            .catch((error) => {
+                console.log(error)
+            })
     }
 
     render() {
@@ -68,7 +106,7 @@ class Events extends Component {
 
                         <Form.Group controlId="formBasicDate">
                             <Form.Label>Date</Form.Label>
-                            <Form.Control type="date" placeholder="Date" ref={this.dateRef} />
+                            <Form.Control type="datetime-local" placeholder="Date" ref={this.dateRef} />
                         </Form.Group>
                         <Form.Group controlId="formBasicDescription">
                             <Form.Label>Description</Form.Label>
