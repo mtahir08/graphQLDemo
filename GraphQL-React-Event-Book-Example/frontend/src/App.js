@@ -30,10 +30,12 @@ class App extends Component {
         }}>
           <MainNavigation />
           <Switch>
-            <Redirect from='/' to='/auth' exact />
-            <Route path='/auth' component={Auth} />
+            {this.state.token && <Redirect from='/' to='/events' exact />}
+            {this.state.token && <Redirect from='/auth' to='/events' exact />}
+            {!this.state.token && <Route path='/auth' component={Auth} />}
             <Route path='/events' component={Events} />
-            <Route path='/bookings' component={Bookings} />
+            {this.state.token && <Route path='/bookings' component={Bookings} />}
+            {!this.state.token && <Redirect to='/auth' />}
           </Switch>
         </AuthContext.Provider>
       </BrowserRouter >
