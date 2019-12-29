@@ -1,10 +1,15 @@
 import React, { Component } from 'react';
 import Button from 'react-bootstrap/Button'
 import ListGroup from 'react-bootstrap/ListGroup'
+
+import { AuthContext } from './../context/auth-context'
+
 class Bookings extends Component {
     state = {
         bookings: []
     }
+
+    static contextType = AuthContext;
 
     componentDidMount() {
         this.fetchBookins()
@@ -58,8 +63,45 @@ class Bookings extends Component {
             })
     }
 
-    cancelBooking = () => {
+    cancelBooking = (bookingId) => {
+        const reqBody = {
+            query: `mutation {
+                cancelBooking(bookingId:"${bookingId}") {
+                    _id
+                    title
+                    price
+                    date
+                    description
+                    creator {
+                        _id
+                        email
+                    }
+                }
+            }`
+        }
 
+        const options = {
+            method: "POST",
+            body: JSON.stringify(reqBody),
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${this.context.token}`
+            }
+        }
+
+        fetch('http://localhost:4000/graphql', options)
+            .then((response) => {
+                return response.json()
+            })
+            .then((json) => {
+                if (json.data.cancelBooking) {
+                    const bookings = this.state.bookings.filter((booking) => booking._id !== bookingId);
+                    this.setState({ bookings });
+                }
+            })
+            .catch((error) => {
+                console.log(error)
+            })
     }
 
     render() {
@@ -67,7 +109,7 @@ class Bookings extends Component {
             {this.state.bookings.map((item, index) => (
                 <ListGroup.Item eventKey={index.toString()} style={{ display: 'flex', justifyContent: 'space-around' }}>
                     {item.event.title}
-                    <Button variant='info' onClick={() => this.cancelBooking(item._id)}>
+                    <Button onClick={() => this.cancelBooking(item._id)}>
                         Cancel
                     </Button>
                 </ListGroup.Item>
