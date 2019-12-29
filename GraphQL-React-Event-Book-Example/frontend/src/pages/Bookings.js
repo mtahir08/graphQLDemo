@@ -46,6 +46,7 @@ class Bookings extends Component {
             body: JSON.stringify(reqBody),
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Bearer ${this.context.token}`
             }
         }
 
@@ -79,7 +80,6 @@ class Bookings extends Component {
                 }
             }`
         }
-
         const options = {
             method: "POST",
             body: JSON.stringify(reqBody),
