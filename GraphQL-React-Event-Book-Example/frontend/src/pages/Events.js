@@ -127,7 +127,52 @@ class Events extends Component {
     }
 
     onEventBook = (eventId) => {
+        const reqBody = {
+            query: `mutation{
+                bookEvent(eventId:"${eventId}"){
+                    _id
+                    event {
+                        _id
+                        title
+                        price
+                        date
+                        description
+                        creator {
+                            _id
+                            email
+                        }
+                    }
+                    user {
+                        _id
+                        email
+                    }
+                    createdAt
+                    updatedAt
+                }
+            }`
+        }
 
+        const options = {
+            method: "POST",
+            body: JSON.stringify(reqBody),
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${this.context.token}`
+            }
+        }
+
+        fetch('http://localhost:4000/graphql', options)
+            .then((response) => {
+                return response.json()
+            })
+            .then((json) => {
+                console.log(json.data.bookEvent);
+                if (json.data.bookEvent && json.data.bookEvent._id) {
+                }
+            })
+            .catch((error) => {
+                console.log(error)
+            })
     }
 
     render() {
