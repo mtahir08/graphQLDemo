@@ -80,43 +80,45 @@ class Events extends Component {
 
     render() {
         const { showModal } = this.state;
-        return (
-            <Jumbotron style={{ width: '80%', margin: '10px auto', textAlign: 'center' }}>
-                <Button variant='info' onClick={() => this.toggleCreateModal(true)}>
-                    Create Events
+        if (this.context.token)
+            return (
+                <Jumbotron style={{ width: '80%', margin: '10px auto', textAlign: 'center' }}>
+                    <Button variant='info' onClick={() => this.toggleCreateModal(true)}>
+                        Create Events
                 </Button>
-                <ModalEvent
-                    title="Add Event"
-                    close
-                    confirm
-                    show={showModal}
-                    handleClose={() => { this.toggleCreateModal(false) }}
-                    handleConfirm={() => { this.onSubmit() }}
-                >
-                    <Form >
-                        <Form.Group controlId="formBasicTitle">
-                            <Form.Label>Title</Form.Label>
-                            <Form.Control type="text" placeholder="Title" ref={this.titleRef} />
-                        </Form.Group>
+                    <ModalEvent
+                        title="Add Event"
+                        close
+                        confirm
+                        show={showModal}
+                        handleClose={() => { this.toggleCreateModal(false) }}
+                        handleConfirm={() => { this.onSubmit() }}
+                    >
+                        <Form >
+                            <Form.Group controlId="formBasicTitle">
+                                <Form.Label>Title</Form.Label>
+                                <Form.Control type="text" placeholder="Title" ref={this.titleRef} />
+                            </Form.Group>
 
-                        <Form.Group controlId="formBasicPrice">
-                            <Form.Label>Price</Form.Label>
-                            <Form.Control type="number" placeholder="Price" ref={this.priceRef} />
-                        </Form.Group>
+                            <Form.Group controlId="formBasicPrice">
+                                <Form.Label>Price</Form.Label>
+                                <Form.Control type="number" placeholder="Price" ref={this.priceRef} />
+                            </Form.Group>
 
-                        <Form.Group controlId="formBasicDate">
-                            <Form.Label>Date</Form.Label>
-                            <Form.Control type="datetime-local" placeholder="Date" ref={this.dateRef} />
-                        </Form.Group>
-                        <Form.Group controlId="formBasicDescription">
-                            <Form.Label>Description</Form.Label>
-                            <Form.Control as="textarea" placeholder="Description" ref={this.descriptionRef} />
-                        </Form.Group>
-                    </Form>
+                            <Form.Group controlId="formBasicDate">
+                                <Form.Label>Date</Form.Label>
+                                <Form.Control type="datetime-local" placeholder="Date" ref={this.dateRef} />
+                            </Form.Group>
+                            <Form.Group controlId="formBasicDescription">
+                                <Form.Label>Description</Form.Label>
+                                <Form.Control as="textarea" placeholder="Description" ref={this.descriptionRef} />
+                            </Form.Group>
+                        </Form>
 
-                </ModalEvent>
-            </Jumbotron>
-        );
+                    </ModalEvent>
+                </Jumbotron>
+            );
+        return null
 
     }
 }
