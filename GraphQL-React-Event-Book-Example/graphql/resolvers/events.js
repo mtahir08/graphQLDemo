@@ -6,8 +6,8 @@ const { transformEvent, user } = require('./general');
 module.exports = {
     events: async () => {
         try {
-            const events = await Event.find()
-            return events.map((event) => {
+            const events = await Event.find({})
+            return await events.map((event) => {
                 //event.id is mongoose equal to event._doc._id.toString()
                 return transformEvent(event)
             })

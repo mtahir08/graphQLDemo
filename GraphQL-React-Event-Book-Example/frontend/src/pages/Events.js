@@ -2,12 +2,15 @@ import React, { Component } from 'react';
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
 import Jumbotron from 'react-bootstrap/Jumbotron'
+import ListGroup from 'react-bootstrap/ListGroup'
 
 import { ModalEvent } from './../components/Modal/Modal'
+import { EventsList } from './../components/Events/EventList'
 import { AuthContext } from './../context/auth-context'
 class Events extends Component {
     state = {
-        showModal: false
+        showModal: false,
+        events: []
     }
 
     constructor(props) {
@@ -18,6 +21,50 @@ class Events extends Component {
         this.descriptionRef = React.createRef()
     }
     static contextType = AuthContext
+
+    componentDidMount() {
+        this.fetchEvents()
+    }
+
+    fetchEvents = () => {
+        const reqBody = {
+            query: `query {
+                events {
+                    _id
+                    title
+                    price
+                    date
+                    description
+                    creator {
+                        _id
+                        email
+                    }
+                }
+            }`
+        }
+
+        const options = {
+            method: "POST",
+            body: JSON.stringify(reqBody),
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        }
+
+        fetch('http://localhost:4000/graphql', options)
+            .then((response) => {
+                return response.json()
+            })
+            .then((json) => {
+                console.log(json.data);
+                if (json.data.events && Array.isArray(json.data.events)) {
+                    this.setState({ events: json.data.events })
+                }
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+    }
 
     toggleCreateModal = (flag) => {
         this.setState({ showModal: flag })
@@ -71,6 +118,7 @@ class Events extends Component {
             .then((json) => {
                 console.log(json.data.createEvent);
                 if (json.data.createEvent && json.data.createEvent._id) {
+                    this.setState({ events: [...this.state.events, json.data.createEvent] })
                 }
             })
             .catch((error) => {
@@ -78,14 +126,18 @@ class Events extends Component {
             })
     }
 
+    onEventBook = (eventId) => {
+
+    }
+
     render() {
-        const { showModal } = this.state;
-        if (this.context.token)
-            return (
+        const { showModal, events } = this.state;
+        return <React.Fragment>
+            {(this.context.token) ? (
                 <Jumbotron style={{ width: '80%', margin: '10px auto', textAlign: 'center' }}>
                     <Button variant='info' onClick={() => this.toggleCreateModal(true)}>
                         Create Events
-                </Button>
+                    </Button>
                     <ModalEvent
                         title="Add Event"
                         close
@@ -117,8 +169,12 @@ class Events extends Component {
 
                     </ModalEvent>
                 </Jumbotron>
-            );
-        return null
+            ) : null}
+            <EventsList
+                events={events}
+                bookEvent={this.onEventBook}
+            />
+        </React.Fragment>
 
     }
 }
