@@ -66,8 +66,8 @@ class Bookings extends Component {
 
     cancelBooking = (bookingId) => {
         const reqBody = {
-            query: `mutation {
-                cancelBooking(bookingId:"${bookingId}") {
+            query: `mutation CancelBooking($bookingId: ID!) {
+                cancelBooking(bookingId: $bookingId) {
                     _id
                     title
                     price
@@ -78,7 +78,10 @@ class Bookings extends Component {
                         email
                     }
                 }
-            }`
+            }`,
+            variables: {
+                bookingId: bookingId
+            }
         }
         const options = {
             method: "POST",
