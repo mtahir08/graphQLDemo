@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
 import Jumbotron from 'react-bootstrap/Jumbotron'
-import ListGroup from 'react-bootstrap/ListGroup'
+import Spinner from 'react-bootstrap/Spinner'
 
 import { ModalEvent } from './../components/Modal/Modal'
 import { EventsList } from './../components/Events/EventList'
@@ -10,7 +10,8 @@ import { AuthContext } from './../context/auth-context'
 class Events extends Component {
     state = {
         showModal: false,
-        events: []
+        events: [],
+        loading: false
     }
 
     constructor(props) {
@@ -27,6 +28,7 @@ class Events extends Component {
     }
 
     fetchEvents = () => {
+        this.setState({ loading: true })
         const reqBody = {
             query: `query {
                 events {
@@ -58,11 +60,12 @@ class Events extends Component {
             .then((json) => {
                 console.log(json.data);
                 if (json.data.events && Array.isArray(json.data.events)) {
-                    this.setState({ events: json.data.events })
+                    this.setState({ events: json.data.events, loading: false })
                 }
             })
             .catch((error) => {
                 console.log(error)
+                this.setState({ loading: false })
             })
     }
 
@@ -185,7 +188,11 @@ class Events extends Component {
     }
 
     render() {
-        const { showModal, events } = this.state;
+        const { showModal, events, loading } = this.state;
+        if (loading)
+            return <div style={{ textAlign: 'center' }}>
+                <Spinner animation="grow" />
+            </div>
         return <React.Fragment>
             {(this.context.token) ? (
                 <Jumbotron style={{ width: '80%', margin: '10px auto', textAlign: 'center' }}>
