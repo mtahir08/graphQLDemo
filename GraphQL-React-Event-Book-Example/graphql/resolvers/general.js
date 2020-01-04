@@ -64,7 +64,9 @@ const transformUser = (user) => {
     return {
         ...user._doc,
         _id: user.id,
-        createdEvents: eventLoader.load.bind(this, user._doc.createdEvents)
+        // createdEvents: eventLoader.loadMany.bind(this, user._doc.createdEvents)
+        // OR
+        createdEvents: () => eventLoader.loadMany(user._doc.createdEvents)
     }
 }
 
