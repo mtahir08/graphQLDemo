@@ -80,7 +80,7 @@ class Bookings extends Component {
                 }
             }`,
             variables: {
-                bookingId: bookingId
+                bookingId
             }
         }
         const options = {

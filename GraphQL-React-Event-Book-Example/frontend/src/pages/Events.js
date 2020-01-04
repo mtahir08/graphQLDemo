@@ -87,8 +87,8 @@ class Events extends Component {
         }
 
         const reqBody = {
-            query: `mutation{
-                createEvent(eventInput:{title:"${title}", price:${price}, date:"${date}", description:"${description}"}){
+            query: `mutation CreateEvent($title: String!, $price: Float!, $date: String!, $description: String!){
+                createEvent(eventInput:{title: $title, price: $price, date: $date, description: $description}){
                     _id
                     title
                     price
@@ -99,7 +99,13 @@ class Events extends Component {
                         email
                     }
                 }
-            }`
+            }`,
+            variables: {
+                title,
+                price: Number(price),
+                date,
+                description
+            }
         }
 
         const options = {
@@ -128,8 +134,8 @@ class Events extends Component {
 
     onEventBook = (eventId) => {
         const reqBody = {
-            query: `mutation{
-                bookEvent(eventId:"${eventId}"){
+            query: `mutation BookEvent($eventId: String!){
+                bookEvent(eventId: $eventId){
                     _id
                     event {
                         _id
@@ -149,7 +155,10 @@ class Events extends Component {
                     createdAt
                     updatedAt
                 }
-            }`
+            }`,
+            variables: {
+                eventId
+            }
         }
 
         const options = {
